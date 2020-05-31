@@ -1,0 +1,110 @@
+CREATE TABLE stockUser (
+  user_id INT AUTO_INCREMENT ,
+  user_number VARCHAR(10) NOT NULL, 
+  user_name TEXT NOT NULL , 
+  user_password VARCHAR(20) NOT NULL , 
+  enable TINYINT(1) NOT NULL ,
+
+  PRIMARY KEY(user_id) ,
+  UNIQUE KEY(user_number) 
+);
+
+CREATE TABLE stockList ( 
+  stock_id int AUTO_INCREMENT , 
+  stock_name TEXT NOT NULL , 
+  amount VARCHAR(20) ,
+  type INT NOT NULL ,
+  remarks TEXT ,
+  PRIMARY KEY(stock_id) 
+);
+
+CREATE TABLE stockLog(
+  log_id INT AUTO_INCREMENT , 
+  stock_id INT NOT NULL ,
+  user_id INT NOT NULL ,
+  in_out_n INT NOT NULL , 
+  update_date DATETIME NOT NULL ,
+  PRIMARY KEY(log_id) 
+);
+
+
+insert into stockUser (user_number, user_name, user_password, enable) 
+values("A11", "user1", "111", 1);
+
+insert into stockUser (user_number, user_name, user_password, enable) 
+values("A12", "user2", "222", 1);
+
+
+insert into stockList (stock_name, amount, type, remarks) 
+values ("stock1", "25kg", 1, "");
+
+insert into stockList (stock_name, amount, type, remarks) 
+values ("stock2", "25kg", 1, "");
+
+insert into stockList (stock_name, amount, type, remarks) 
+values ("stock3", "25kg", 1, "");
+
+
+insert into stockLog (stock_id, user_id, in_out_n, update_date) 
+values (1, 2, 10, "2019-04-01 10:00:00");
+
+
+update stockList set type=2;
+
+
+delete from stockList;
+
+select stock_id, stock_name from stockList;
+
+select * from stockList where stock_id = 2;
+
+select * from stockList where stock_id <= 2;
+
+SELECT * FROM stockUser WHERE user_number = "A11" AND user_password="111" AND enable=1;
+
+update stockList set type=2 where stock_id=3;
+
+select distinct type from stockList;
+
+SELECT * FROM stockList ORDER BY stock_id DESC;
+= SELECT * FROM stockList ORDER BY -stock_id;
+
+SELECT * FROM stockList ORDER BY stock_id;
+
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (4 , 2 , 10 , "2019-04-01 10:00:00");
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (5 , 2 , 5 , "2019-04-01 10:00:00");
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (6 , 2 , 7 , "2019-04-01 10:00:00");
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (4 , 2 , -3 , "2019-04-01 10:015:00");
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (5 , 2 , -2 , "2019-04-01 10:015:00");
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (5 , 1 , 10 , "2019-04-01 10:20:00");
+
+INSERT INTO stockLog (stock_id , user_id , in_out_n , update_date) 
+VALUES (6 , 1 , -5 , "2019-04-01 10:25:00");
+
+
+select stock_id sum(in_out_n) as sum_n from stockLog group by stock_id;
+
+select stock_id, sum(in_out_n) as sum_n from stockLog group by stock_id
+having stock_id >= 4;
+
+SELECT stockList.stock_id , stock_name , amount ,type , SUM(in_out_n) AS sum_n , remarks FROM stockLog , stockList
+WHERE stockLog.stock_id = stockList.stock_id GROUP BY stock_id;
+
+INSERT INTO stockList (stock_name , amount , type , remarks) 
+VALUES ("stock4" , "1kg" , 3,"");
+
+SELECT stockList.stock_id , stock_name , amount ,type , SUM(in_out_n) AS sum_n , remarks FROM stockList INNER JOIN stockLog
+ON stockLog.stock_id = stockList.stock_id GROUP BY stock_id;
+
